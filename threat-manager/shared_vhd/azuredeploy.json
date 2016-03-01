@@ -8,10 +8,10 @@
         "description": "Storage account for deployment"
       }
     },
-    "userImageBlobName": {
+    "userContainerBlobName": {
       "type": "string",
       "metadata": {
-        "description": "Blob within storage account for deployment"
+        "description": "Blob container within storage account for deployment"
       }
     },
     "osDiskVhdUri": {
@@ -69,7 +69,7 @@
     "alertlogicIPRange2": "204.110.219.96/27",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]",
-    "osDiskVhdName": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userImageBlobName'),'/',variables('vmName'),'osDisk.vhd')]",
+    "osDiskVhdName": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userContainerBlobName'),'/',variables('vmName'),'osDisk.vhd')]",
     "apiVersion": "2015-06-15"
   },
   "resources": [

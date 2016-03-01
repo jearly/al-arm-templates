@@ -166,6 +166,7 @@ Your new deployment should successfully create the 'myNewTMVM' VM
 #### Deployment Parameters:
 ```
 userImageStorageAccountName: (Storage account where the Threat Manager VM will be deployed)
+userContainerBlobName: (Blob container to deploy Alert Logic Threat Manager)
 osDiskVhdUri: (Link to Alert Logic Threat Manager VHD)
 adminUsername: (admin username for the VM)
 adminPassword: (admin password for the VM)
