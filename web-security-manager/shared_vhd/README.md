@@ -163,6 +163,7 @@ Your new deployment should successfully create the 'myNewWSMVM' VM
 #### Deployment Parameters:
 ```
 userImageStorageAccountName: (Storage account where the Web Security Manager VM will be deployed)
+userContainerBlobName: (Blob container to deploy Alert Logic Web Security Manager)
 osDiskVhdUri: (Link to Alert Logic Web Security Manager VHD)
 adminUsername: (admin username for the VM)
 adminPassword: (admin password for the VM)

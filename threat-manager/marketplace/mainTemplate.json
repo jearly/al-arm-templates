@@ -2,84 +2,82 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "userImageStorageAccountName": {
+    "tmVersion": {
       "type": "string",
+      "defaultValue": "1.2.0",
+      "allowedValues": [
+        "1.2.0",
+        "1.1.0"
+      ],
       "metadata": {
-        "description": "Storage account for deployment"
+        "description": "The Threat Manager version for the VM."
       }
     },
-    "userContainerBlobName": {
+    "vmSize": {
       "type": "string",
       "metadata": {
-        "description": "Blob container within storage account for deployment"
+        "description": "This is the size of your Alert Logic Threat Manager VM"
       }
     },
-    "osDiskVhdUri": {
+    "vmName": {
       "type": "string",
       "metadata": {
-        "description": "Uri of the latest Threat Manager image"
+        "description": "This is the name of your Alert Logic Threat Manager VM"
       }
     },
     "adminUsername": {
       "type": "string",
       "defaultValue": "alertlogic",
       "metadata": {
-        "description": "User name for the virtual machine."
+        "description": "User name for the Virtual Machine."
       }
     },
     "adminPassword": {
       "type": "securestring",
       "defaultValue": "P@ssw0rd1",
       "metadata": {
-        "description": "Password for the virtual machine."
+        "description": "Password for the Virtual Machine."
       }
     },
-    "vmName": {
+    "commonPrefix": {
       "type": "string",
       "metadata": {
-        "description": "Name your virtual machine"
-      }
-    },
-    "vmSize": {
-      "type": "string",
-      "defaultValue": "Standard_A2",
-      "allowedValues": [
-        "Standard_A2",
-        "Standard_A3",
-        "Standard_A4"
-      ],
-      "metadata": {
-        "description": "Select the size of your virtual machine."
+        "description": "Prefix to use for common resource naming"
       }
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "publicIPAddressName": "userImagePublicIP",
-    "osType": "Linux",
-    "vmName": "[parameters('vmName')]",
-    "virtualNetworkName": "al-tm-VNET",
-    "nicName": "al-tm-VMNic",
-    "NSGName": "al-tm-NSG",
+    "dataDisk1VhdName": "datadisk1",
+    "imagePublisher": "alertlogic",
+    "imageOffer": "alert-logic-tm",
+    "imageSKU": "20215000100-tmpbyol",
+    "OSDiskName": "tmdisk",
+    "nicName": "TM-NIC",
     "addressPrefix": "10.0.0.0/16",
-    "subnet1Name": "al-tm-Subnet",
-    "subnet1Prefix": "10.0.0.0/24",
-    "publicIPAddressType": "Dynamic",
+    "subnetName": "Subnet",
+    "subnetPrefix": "10.0.0.0/24",
     "alertlogicIPRange1": "204.110.218.96/27",
     "alertlogicIPRange2": "204.110.219.96/27",
+    "storageAccountName" : "[toLower(concat(parameters('commonPrefix'), uniqueString(resourceGroup().id)))]",
+    "storageAccountType": "Standard_LRS",
+    "publicIPAddressName": "[concat(parameters('commonPrefix'), 'TM-IP')]",
+    "publicIPAddressType": "Dynamic",
+    "NSGName": "[concat(parameters('commonPrefix'), 'TM-NSG')]",
+    "vmStorageAccountContainerName": "vhds",
+    "virtualNetworkName":  "[concat(parameters('commonPrefix'), 'VNet')]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]",
-    "osDiskVhdName": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userContainerBlobName'),'/',variables('vmName'),'osDisk.vhd')]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "apiVersion": "2015-06-15"
   },
   "resources": [
     {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
       "apiVersion": "[variables('apiVersion')]",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
       "location": "[variables('location')]",
       "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+        "accountType": "[variables('storageAccountType')]"
       }
     },
     {
@@ -234,6 +232,18 @@
     },
     {
       "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('NSGName'))]"
+      ],
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('location')]",
@@ -245,9 +255,9 @@
         },
         "subnets": [
           {
-            "name": "[variables('subnet1Name')]",
+            "name": "[variables('subnetName')]",
             "properties": {
-              "addressPrefix": "[variables('subnet1Prefix')]"
+              "addressPrefix": "[variables('subnetPrefix')]"
             }
           }
         ]
@@ -256,7 +266,7 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
+      "name": "[concat(parameters('commonPrefix'), variables('nicName'))]",
       "location": "[variables('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
@@ -276,7 +286,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
               },
               "subnet": {
-                "id": "[variables('subnet1Ref')]"
+                "id": "[variables('subnetRef')]"
               }
             }
           }
@@ -286,45 +296,64 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[variables('vmName')]",
+      "name": "[parameters('vmName')]",
       "location": "[variables('location')]",
+      "plan": {
+          "name": "[variables('imageSKU')]",
+          "publisher": "[variables('imagePublisher')]",
+          "product": "[variables('imageOffer')]"
+      },
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('commonPrefix'), variables('nicName'))]"
       ],
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[variables('vmName')]",
+          "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('imageSKU')]",
+            "version": "[parameters('tmVersion')]"
+          },
           "osDisk": {
-            "name": "[concat(variables('vmName'),'-osDisk')]",
-            "osType": "[variables('osType')]",
-            "caching": "ReadWrite",
-            "createOption": "FromImage",
-            "image": {
-              "uri": "[parameters('osDiskVhdUri')]"
-            },
+            "name": "osdisk",
             "vhd": {
-              "uri": "[variables('osDiskVhdName')]"
+              "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('OSDiskName'),'.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "datadisk1",
+              "diskSizeGB": "100",
+              "lun": 0,
+              "vhd": {
+                "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('dataDisk1VhdName'),'.vhd')]"
+              },
+              "createOption": "Empty"
             }
-          }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('commonPrefix'), variables('nicName')))]"
             }
           ]
         },
         "diagnosticsProfile": {
           "bootDiagnostics": {
              "enabled": "true",
-             "storageUri": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net')]"
+             "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
           }
         }
       }

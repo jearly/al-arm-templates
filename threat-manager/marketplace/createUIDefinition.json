@@ -1,0 +1,95 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.0.1-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "vmName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Virtual Machine Name",
+        "toolTip": "The name of the new Alert Logic Threat Manager.",
+        "constraints": {
+          "required": true,
+          "regex": "^[a-z0-9]{3,24}$",
+          "validationMessage": "VM names must be between 3 and 24 characters long, and can contain only numbers and lowercase letters."
+        }
+      },
+      {
+        "name": "adminUsername",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "Username",
+        "toolTip": "Admin username for the virtual machines. Same Credientials is to SSH to the box.",
+        "osPlatform": "Linux"
+      },
+      {
+        "name": "SSHCredntials",
+        "type": "Microsoft.Compute.CredentialsCombo",
+        "label": {
+                  "authenticationType": "Authentication type",
+                  "password": "Password",
+                  "confirmPassword": "Confirm password",
+                  "sshPublicKey": "SSH public key"
+                },
+        "toolTip": {
+                "authenticationType": "",
+                "password": "",
+                "sshPublicKey": ""
+              },
+         "constraints": {
+                "required": true
+              },
+"options": {
+  "hideConfirmation": false
+},
+"osPlatform": "Linux"
+}
+    ],
+    "steps": [
+      {
+        "name": "threatConfig",
+        "label": "Threaet Manager Settings",
+        "subLabel": {
+          "preValidation": "Configure the VM",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Threaet Manager Settings",
+        "elements": [
+          {
+            "name": "vmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Virtual machine size",
+            "toolTip": "The size of virtual machine to provision for the node.",
+            "recommendedSizes": [
+              "Standard_A2",
+              "Standard_A3",
+              "Standard_A4"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_A2",
+                "Standard_A3",
+                "Standard_A4"
+              ]
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "alertlogic",
+              "offer": "alert-logic-tm",
+              "sku": "20215000100-tmpbyol"
+            }
+          }
+
+        ]
+      }
+    ],
+    "outputs": {
+      "vmName": "[basics('vmName')]",
+      "adminUsername": "[basics('adminUsername')]",
+      "vmSize": "[steps('threatConfig').vmSize]",
+      "location": "[location()]",
+      "authenticationType":  "[basics('SSHCredntials').authenticationType]",
+      "password": "[basics('SSHCredntials').password]",
+      "sshKey": "[basics('SSHCredntials').sshPublicKey]"
+    }
+  }
+}
