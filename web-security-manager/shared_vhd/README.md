@@ -136,8 +136,8 @@ info:    group create command OK
 # azure group deployment create --template-uri https://raw.githubusercontent.com/alertlogic/al-arm-templates/master/web-security-manager/shared_vhd/azuredeploy.json myResourceGroup myDeployment
 info:    Executing command group deployment create
 info:    Supply values for the following parameters
-userImageStorageAccountName: storageaccountname
-userImageBlobName: containername
+storageAccountName: storageaccountname
+blobContainerName: containername
 osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd
 vmName: myNewWSMVM
 + Initializing template configurations and parameters                          
@@ -151,8 +151,8 @@ data:    Timestamp          : 2016-03-01T18:44:41.7279061Z
 data:    Mode               : Incremental
 data:    Name                         Type          Value                                                              
 data:    ---------------------------  ------------  -------------------------------------------------------------------
-data:    userImageStorageAccountName  String        storageaccountname                                                          
-data:    userImageBlobName            String        containername                                                                
+data:    storageAccountName           String        storageaccountname                                                          
+data:    blobContainerName            String        containername                                                                
 data:    osDiskVhdUri                 String        http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd
 data:    adminUsername                String        alertlogic                                                         
 data:    adminPassword                SecureString  undefined                                                          
@@ -172,8 +172,8 @@ Your new deployment should successfully create the 'myNewWSMVM' VM
 
 #### Deployment Parameters:
 ```
-userImageStorageAccountName: (Storage account where the Web Security Manager VM will be deployed)
-userContainerBlobName: (Blob container to deploy Alert Logic Web Security Manager)
+storageAccountName: (Storage account where the Web Security Manager VM will be deployed)
+blobContainerName: (Blob container to deploy Alert Logic Web Security Manager)
 osDiskVhdUri: (Link to Alert Logic Web Security Manager VHD)
 adminUsername: (admin username for the VM)
 adminPassword: (admin password for the VM)
