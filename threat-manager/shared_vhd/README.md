@@ -17,10 +17,11 @@ This template allows you to deploy an Alert Logic Threat Manager VM, using the l
 
 If you do not have a pre-existing Storage Account and Blob Container available, follow the steps below to create them.
 
+ * Install Azure CLI tools from the link in the requirements section
  * Click the 'Azure Storage Account' link in the requirements section and follow the steps to create a new storage account.
  * Create a Blob service container within your storage account by clicking Blobs -> + Container
  * Copy your storage account access key by clicking the key icon in your storage account view. See requirements section 'Azure Storage Access Keys' for details on obtaining your storage key.
- * Set azure cli mode to asm
+ * Open a terminal or command prompt and set azure cli mode to asm
  
  ```
  # azure config mode asm
