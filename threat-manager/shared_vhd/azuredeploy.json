@@ -2,13 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "userImageStorageAccountName": {
+    "storageAccountName": {
       "type": "string",
       "metadata": {
         "description": "Storage account for deployment"
       }
     },
-    "userContainerBlobName": {
+    "blobContainerName": {
       "type": "string",
       "metadata": {
         "description": "Blob container within storage account for deployment"
@@ -17,7 +17,7 @@
     "osDiskVhdUri": {
       "type": "string",
       "metadata": {
-        "description": "Uri of the latest Threat Manager image"
+        "description": "Full URI of the latest Threat Manager image copied to your storage account"
       }
     },
     "adminUsername": {
@@ -69,7 +69,7 @@
     "alertlogicIPRange2": "204.110.219.96/27",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]",
-    "osDiskVhdName": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net/',parameters('userContainerBlobName'),'/',variables('vmName'),'osDisk.vhd')]",
+    "osDiskVhdName": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk.vhd')]",
     "apiVersion": "2015-06-15"
   },
   "resources": [
@@ -324,7 +324,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
              "enabled": "true",
-             "storageUri": "[concat('http://',parameters('userImageStorageAccountName'),'.blob.core.windows.net')]"
+             "storageUri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net')]"
           }
         }
       }

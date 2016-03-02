@@ -40,7 +40,7 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  info:    Executing command vm disk upload
  warn:    Any existing blob will be overwritten at http://storageaccountname.blob.core.windows.net/
  containername/al-tmc-image_latest.vhd
- +  Copying image: 100% (42949673472/42949673472)                               
+ +  Copying image: 100% (42949673472/42949673472)
  info:    vm disk upload command OK
  #
  ```
@@ -58,8 +58,8 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 ###### Required fields
 | Field | Description | Example |
 | ----- |:-----------:| :------:|
-| USERIMAGESTORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
-| USERCONTAINERBLOBNAME | Blob container within your storage account | myblobcontainer |
+| STORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
+| BLOBCONTAINERNAME | Blob container within your storage account | myblobcontainer |
 | OSDISKVHDURI | Fully qualified URL for Threat Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-tmc-image_latest.vhd |
 | VMNAME | Name of the new Threat Manager VM being deployed | awesome-new-threat-manager-vm |
 | VMSIZE | Size of the new Threat Manager VM being deployed(Defaults to Standard_A2 | Standard_A2 |
