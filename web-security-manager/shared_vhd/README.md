@@ -55,6 +55,15 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
+###### Required fields
+| Field | Description | Example |
+| ----- |:-----------:| :------:|
+| USERIMAGESTORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
+| USERCONTAINERBLOBNAME | Blob container within your storage account | myblobcontainer |
+| OSDISKVHDURI | Fully qualified URL for Web Security Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-wsm-image_latest.vhd |
+| VMNAME | Name of the new Web Security Manager VM being deployed | awesome-new-web-security-manager-vm |
+| VMSIZE | Size of the new Web Security Manager VM being deployed(Defaults to Standard_A2 | Standard_A2 |
+| Resource Group | Resource Group used to deploy new Web Security Manager VM(Use an existing Resource Group or create a new one) | myResourceGroup |
 
 #### Deploy from cli
 

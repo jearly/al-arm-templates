@@ -36,9 +36,7 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  > azure vm disk upload http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd [storage account URL]/[blob container name]/[filename].vhd [storage-account-key]
 
  ```
- # azure vm disk upload http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd http://storageaccountname.blob.core.windows.net/
-containername/al-tmc-image_latest.vhd xJdkdCi35RT2FWncoLf0xl6/pkNlHSO2/
-vw3Gxs0uG+2/IN3zmHmnieeodmiNJEUkvmQctb/POTD/ONVxwx6wQ==
+ # azure vm disk upload http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd xJdkdCi35RT2FWncoLf0xl6/pkNlHSO2/vw3Gxs0uG+2/IN3zmHmnieeodmiNJEUkvmQctb/POTD/ONVxwx6wQ==
  info:    Executing command vm disk upload
  warn:    Any existing blob will be overwritten at http://storageaccountname.blob.core.windows.net/
  containername/al-tmc-image_latest.vhd
@@ -50,7 +48,6 @@ vw3Gxs0uG+2/IN3zmHmnieeodmiNJEUkvmQctb/POTD/ONVxwx6wQ==
 
 #### Deploy from browser
 
-
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Falertlogic%2Fal-arm-templates%2Fmaster%2Fthreat-manager%2Fshared_vhd%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
@@ -58,6 +55,15 @@ vw3Gxs0uG+2/IN3zmHmnieeodmiNJEUkvmQctb/POTD/ONVxwx6wQ==
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
+###### Required fields
+| Field | Description | Example |
+| ----- |:-----------:| :------:|
+| USERIMAGESTORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
+| USERCONTAINERBLOBNAME | Blob container within your storage account | myblobcontainer |
+| OSDISKVHDURI | Fully qualified URL for Threat Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-tmc-image_latest.vhd |
+| VMNAME | Name of the new Threat Manager VM being deployed | awesome-new-threat-manager-vm |
+| VMSIZE | Size of the new Threat Manager VM being deployed(Defaults to Standard_A2 | Standard_A2 |
+| Resource Group | Resource Group used to deploy new Threat Manager VM(Use an existing Resource Group or create a new one) | myResourceGroup |
 
 #### Deploy from cli
 
