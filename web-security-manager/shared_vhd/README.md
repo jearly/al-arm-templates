@@ -39,7 +39,7 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  # azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image-latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd xJdkdCi35RT2FWncoLf0xl6/pkNlHSO2/vw3Gxs0uG+2/IN3zmHmnieeodmiNJEUkvmQctbPOTD/ONVxwx6wQ==
  info:    Executing command vm disk upload
  warn:    Any existing blob will be overwritten at http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd
- +  Copying image: 100% (42949673472/42949673472)                               
+ +  Copying image: 100% (42949673472/42949673472)
  info:    vm disk upload command OK
  #
  ```
@@ -58,8 +58,8 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 ###### Required fields
 | Field | Description | Example |
 | ----- |:-----------:| :------:|
-| USERIMAGESTORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
-| USERCONTAINERBLOBNAME | Blob container within your storage account | myblobcontainer |
+| STORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
+| BLOBCONTAINERNAME | Blob container within your storage account | myblobcontainer |
 | OSDISKVHDURI | Fully qualified URL for Web Security Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-wsm-image_latest.vhd |
 | VMNAME | Name of the new Web Security Manager VM being deployed | awesome-new-web-security-manager-vm |
 | VMSIZE | Size of the new Web Security Manager VM being deployed(Defaults to Standard_A2 | Standard_A2 |

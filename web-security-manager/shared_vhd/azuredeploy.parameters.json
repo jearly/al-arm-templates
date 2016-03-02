@@ -8,10 +8,10 @@
     "adminPassword": {
       "value": "password!"
     },
-    "userImageBlobName": {
+    "blobContainerName": {
       "value": "myBlob"
     },
-    "userImageStorageAccountName": {
+    "storageAccountName": {
       "value": "myStorageAccount"
     },
     "osDiskVhdUri": {
@@ -19,6 +19,9 @@
     },
     "vmSize": {
       "value": "Standard_A2"
+    },
+    "vmName": {
+      "value": "myWebSecurityManagerVM"
     }
   }
 }
