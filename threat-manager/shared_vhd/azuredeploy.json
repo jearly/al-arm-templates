@@ -79,7 +79,7 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "publicIPAddressName": "[parameters('virtualNicName')]",
+    "publicIPAddressName": "[parameters('publicNicName')]",
     "osType": "Linux",
     "vmName": "[parameters('vmName')]",
     "virtualNetworkName": "[parameters('virtualNetworkName')]",
