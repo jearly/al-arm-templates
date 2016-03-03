@@ -176,6 +176,7 @@ virtualNetworkName: myvnet
 virtualNicName: myvirtnic
 publicNicName: mypubnic
 subnetName: mysubnet
+vmSize: Standard_A2
 + Initializing template configurations and parameters                          
 + Creating a deployment                                                        
 info:    Created template deployment "myDeployment"
