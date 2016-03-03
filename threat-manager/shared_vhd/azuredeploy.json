@@ -40,18 +40,17 @@
         "description": "Name your virtual machine"
       }
     },
-    "virtualNetworkName": {
-        "type": "string",
-        "metadata": {
-            "description": "Create a new Virtual Network or use an existing one."
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET"
       }
     },
-    "newOrExistingVNET": {
-        "type": "String",
-        "allowedValues": [
-            "new",
-            "existing"
-        ]
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
     },
     "virtualNicName": {
         "type": "string",
@@ -95,9 +94,8 @@
     "publicIPAddressType": "Dynamic",
     "alertlogicIPRange1": "204.110.218.96/27",
     "alertlogicIPRange2": "204.110.219.96/27",
-    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
-    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-    "templatelink": "[concat('https://raw.githubusercontent.com/rjmax/ArmExamples/master/',parameters('newOrExistingVNET'),'VNET.json')]",
+    "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
     "osDiskVhdName": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk.vhd')]",
     "apiVersion": "2015-06-15"
   },
@@ -110,23 +108,6 @@
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
       }
-    },
-    {
-        "apiVersion": "2015-01-01",
-        "name": "nestedTemplate",
-        "type": "Microsoft.Resources/deployments",
-        "properties": {
-            "mode": "incremental",
-            "templateLink": {
-                "uri": "[variables('templatelink')]",
-                "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-                "virtualNetworkName": {
-                    "value": "[parameters('virtualNetworkName')]"
-                }
-            }
-        }
     },
     {
       "apiVersion": "[variables('apiVersion')]",
@@ -280,33 +261,11 @@
     },
     {
       "apiVersion": "[variables('apiVersion')]",
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('virtualNetworkName')]",
-      "location": "[variables('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[variables('addressPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[variables('subnetName')]",
-            "properties": {
-              "addressPrefix": "[variables('subnet1Prefix')]"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
       "location": "[variables('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
-        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
         "[concat('Microsoft.Network/networkSecurityGroups/', variables('NSGName'))]"
       ],
       "properties": {
@@ -322,7 +281,7 @@
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
               },
               "subnet": {
-                "id": "[variables('subnet1Ref')]"
+                "id": "[variables('subnetRef')]"
               }
             }
           }
@@ -375,11 +334,5 @@
         }
       }
     }
-  ],
-  "outputs": {
-        "nestedOutput": {
-            "value": "[reference('nestedTemplate')]",
-            "type": "object"
-        }
-    }
+  ]
 }
