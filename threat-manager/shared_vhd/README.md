@@ -202,18 +202,18 @@ data:    Timestamp          : 2016-03-01T18:44:41.7279061Z
 data:    Mode               : Incremental
 data:    Name                         Type          Value                                                              
 data:    ---------------------------  ------------  -------------------------------------------------------------------
-data:    storageAccountName           String        storageaccountname                                                          
-data:    blobContainerName            String        containername                                                                
-data:    osDiskVhdUri                 String        http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
-data:    adminUsername                String        alertlogic                                                         
-data:    adminPassword                SecureString  undefined                                                          
-data:    vmName                       String        myNewTMVM                                                          
+data:    storageAccountName                   String        storageaccountname                                                          
+data:    blobContainerName                    String        containername                                                                
+data:    osDiskVhdUri                         String        http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
+data:    adminUsername                        String        alertlogic                                                         
+data:    adminPassword                        SecureString  undefined                                                          
+data:    vmName                               String        myNewTMVM                                                          
 data:    existingVirtualNetworkName           String        myvnet                                                          
 data:    existingVirtualNetworkResourceGroup  String        myvnetresourcegroup
-data:    virtualNicName               String        myvirtnic                                                      
-data:    publicNicName                String        mypubnic                                                      
-data:    subnetName                   String        mysubnet
-data:    vmSize                       String        Standard_A3                                                        
+data:    virtualNicName                       String        myvirtnic                                                      
+data:    publicNicName                        String        mypubnic                                                      
+data:    subnetName                           String        mysubnet
+data:    vmSize                               String        Standard_A3                                                        
 info:    group deployment create command OK
 # 
 ```
