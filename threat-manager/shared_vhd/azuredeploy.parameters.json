@@ -17,6 +17,18 @@
     "osDiskVhdUri": {
       "value": "http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd"
     },
+    "virtualNetworkName": {
+        "value": "myNewVNET"
+    },
+    "virtualNicName": {
+        "value": "myNewVNIC"
+    },
+    "publicNicName": {
+        "value": "myNewPNIC"
+    },
+    "subnetName": {
+        "value": "myNewSubnet"
+    },
     "vmSize": {
       "value": "Standard_A2"
     },

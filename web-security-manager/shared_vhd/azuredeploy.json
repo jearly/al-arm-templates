@@ -40,6 +40,30 @@
         "description": "Name of your virtual machine"
       }
     },
+    "virtualNetworkName": {
+        "type": "string",
+        "metadata": {
+            "description": "Create a new Virtual Network or use an existing one."
+      }
+    },
+    "virtualNicName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name the new Virtual Network Interface."
+      }
+    },
+    "publicNicName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of the new Public Network Interface."
+      }
+    },
+    "subnetName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of the desired subnet. Must exist in your chosen Virtual Network."
+      }
+    },
     "vmSize": {
       "type": "string",
       "defaultValue": "Standard_A2",
@@ -55,20 +79,20 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "publicIPAddressName": "userImagePublicIP",
+    "publicIPAddressName": "[parameters('publicNicName')]",
     "osType": "Linux",
     "vmName": "[parameters('vmName')]",
-    "virtualNetworkName": "al-wsm-VNET",
-    "nicName": "al-wsm-VMNic",
+    "virtualNetworkName": "[parameters('virtualNetworkName')]",
+    "nicName": "[parameters('virtualNicName')]",
     "NSGName": "al-wsm-NSG",
     "addressPrefix": "10.0.0.0/16",
-    "subnet1Name": "al-wsm-Subnet",
+    "subnetName": "[parameters('subnetName')]",
     "subnet1Prefix": "10.0.0.0/24",
     "publicIPAddressType": "Dynamic",
     "alertlogicIPRange1": "204.110.218.96/27",
     "alertlogicIPRange2": "204.110.219.96/27",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]",
+    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "osDiskVhdName": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk.vhd')]",
     "apiVersion": "2015-06-15"
   },
@@ -301,7 +325,7 @@
         },
         "subnets": [
           {
-            "name": "[variables('subnet1Name')]",
+            "name": "[variables('subnetName')]",
             "properties": {
               "addressPrefix": "[variables('subnet1Prefix')]"
             }
