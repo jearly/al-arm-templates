@@ -62,6 +62,10 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 | BLOBCONTAINERNAME | Blob container within your storage account | myblobcontainer |
 | OSDISKVHDURI | Fully qualified URL for Threat Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-tmc-image_latest.vhd |
 | VMNAME | Name of the new Threat Manager VM being deployed | awesome-new-threat-manager-vm |
+| VIRTUALNETWORKNAME | Name of new or existing Virtual Network within your selected resource group | myvnet |
+| VIRTUALNICNAME | Unique name for Virtual Network Interface | myvirtnic |
+| PUBLICNICNAME | Unique name for Public Network Interface | mypubnic |
+| SUBNETNAME | Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique. | mysubnet |
 | VMSIZE | Size of the new Threat Manager VM being deployed(Defaults to Standard_A2 | Standard_A2 |
 | Resource Group | Resource Group used to deploy new Threat Manager VM(Use an existing Resource Group or create a new one) | myResourceGroup |
 
@@ -74,6 +78,29 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 info:    Executing command config mode
 info:    New mode is asm
 info:    config mode command OK
+#
+```
+
+* Find your subscription id
+
+```
+# azure account list
+info:    Executing command account list
+data:    Name                    Id                                    Current  State  
+data:    ----------------------  ------------------------------------  -------  -------
+data:    Alert Logic             xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  false    Enabled
+info:    account list command OK
+#
+```
+
+* Set azure cli to use your subscription
+
+```
+# azure config set subscription
+info:    Executing command config set
+info:    Setting "subscription" to value "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+info:    Changes saved
+info:    config set command OK
 #
 ```
 
@@ -140,6 +167,10 @@ storageAccountName: storageaccountname
 blobContainerName: containername
 osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
 vmName: myNewTMVM
+virtualNetworkName: myvnet
+virtualNicName: myvirtnic
+publicNicName: mypubnic
+subnetName: mysubnet
 + Initializing template configurations and parameters                          
 + Creating a deployment                                                        
 info:    Created template deployment "myDeployment"
@@ -157,6 +188,10 @@ data:    osDiskVhdUri                 String        http://storageaccountname.bl
 data:    adminUsername                String        alertlogic                                                         
 data:    adminPassword                SecureString  undefined                                                          
 data:    vmName                       String        myNewTMVM                                                          
+data:    virtualNetworkName           String        myvnet                                                         
+data:    virtualNicName               String        myvirtnic                                                      
+data:    publicNicName                String        mypubnic                                                      
+data:    subnetName                   String        mysubnet
 data:    vmSize                       String        Standard_A2                                                        
 info:    group deployment create command OK
 # 
@@ -178,6 +213,10 @@ osDiskVhdUri: (Link to Alert Logic Threat Manager VHD)
 adminUsername: (admin username for the VM)
 adminPassword: (admin password for the VM)
 vmName: (name of the newly created virtual machine)
+virtualNetworkName: (Name of new or existing Virtual Network within your selected resource group)
+virtualNicName: (Unique name for Virtual Network Interface)
+publicNicName: (Unique name for Public Network Interface)
+subnetName: (Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique.)
 vmSize: (Defaults to Standard_A2)
 ```
 
