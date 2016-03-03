@@ -79,7 +79,8 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 | BLOBCONTAINERNAME | Blob container within your storage account | myblobcontainer |
 | OSDISKVHDURI | Fully qualified URL for Threat Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-tmc-image_latest.vhd |
 | VMNAME | Name of the new Threat Manager VM being deployed | awesome-new-threat-manager-vm |
-| VIRTUALNETWORKNAME | Name of new or existing Virtual Network within your selected resource group | myvnet |
+| EXISTINGVIRTUALNETWORKNAME | Name of new or existing Virtual Network Name | myvnet |
+| EXISTINGVIRTUALNETWORKRESOURCEGROUP | Name of new or existing resource group containing your existing virtual network | myvnetresourcegroup |
 | VIRTUALNICNAME | Unique name for Virtual Network Interface | myvirtnic |
 | PUBLICNICNAME | Unique name for Public Network Interface | mypubnic |
 | SUBNETNAME | Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique. | mysubnet |
@@ -184,7 +185,8 @@ storageAccountName: storageaccountname
 blobContainerName: containername
 osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
 vmName: myNewTMVM
-virtualNetworkName: myvnet
+existingVirtualNetworkName: myvnet
+existingVirtualNetworkResourceGroup: myvnetresourcegroup
 virtualNicName: myvirtnic
 publicNicName: mypubnic
 subnetName: mysubnet
@@ -200,17 +202,18 @@ data:    Timestamp          : 2016-03-01T18:44:41.7279061Z
 data:    Mode               : Incremental
 data:    Name                         Type          Value                                                              
 data:    ---------------------------  ------------  -------------------------------------------------------------------
-data:    storageAccountName           String        storageaccountname                                                          
-data:    blobContainerName            String        containername                                                                
-data:    osDiskVhdUri                 String        http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
-data:    adminUsername                String        alertlogic                                                         
-data:    adminPassword                SecureString  undefined                                                          
-data:    vmName                       String        myNewTMVM                                                          
-data:    virtualNetworkName           String        myvnet                                                         
-data:    virtualNicName               String        myvirtnic                                                      
-data:    publicNicName                String        mypubnic                                                      
-data:    subnetName                   String        mysubnet
-data:    vmSize                       String        Standard_A3                                                        
+data:    storageAccountName                   String        storageaccountname                                                          
+data:    blobContainerName                    String        containername                                                                
+data:    osDiskVhdUri                         String        http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
+data:    adminUsername                        String        alertlogic                                                         
+data:    adminPassword                        SecureString  undefined                                                          
+data:    vmName                               String        myNewTMVM                                                          
+data:    existingVirtualNetworkName           String        myvnet                                                          
+data:    existingVirtualNetworkResourceGroup  String        myvnetresourcegroup
+data:    virtualNicName                       String        myvirtnic                                                      
+data:    publicNicName                        String        mypubnic                                                      
+data:    subnetName                           String        mysubnet
+data:    vmSize                               String        Standard_A3                                                        
 info:    group deployment create command OK
 # 
 ```
@@ -231,7 +234,8 @@ osDiskVhdUri: (Link to Alert Logic Threat Manager VHD)
 adminUsername: (admin username for the VM)
 adminPassword: (admin password for the VM)
 vmName: (name of the newly created virtual machine)
-virtualNetworkName: (Name of new or existing Virtual Network within your selected resource group)
+existingVirtualNetworkName: (Name of existing Virtual Network)
+existingVirtualNetworkResourceGroup: (Name of the resource group containing your existing Virtual Network)
 virtualNicName: (Unique name for Virtual Network Interface)
 publicNicName: (Unique name for Public Network Interface)
 subnetName: (Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique.)
