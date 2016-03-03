@@ -20,7 +20,13 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  * Install Azure CLI tools from the link in the requirements section
  * Click the 'Azure Storage Account' link in the requirements section and follow the steps to create a new storage account.
  * Create a Blob service container within your storage account by clicking Blobs -> + Container
- * Copy your storage account access key by clicking the key icon in your storage account view. See requirements section 'Azure Storage Access Keys' for details on obtaining your storage key.
+ * Copy your storage account access key:
+ 
+ > View and copy storage access keys
+ >
+ > In the Azure Portal, navigate to your storage account and click the Keys icon to view, copy, and regenerate your account access keys. The Access Keys blade also includes pre-configured connection strings using your primary and secondary keys that you can copy to use in your applications
+ 
+ 
  * Open a terminal or command prompt and set azure cli mode to asm
  
  ```
@@ -36,7 +42,7 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  > azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image-latest.vhd [storage account URL]/[blob container name]/[filename].vhd [storage-account-key]
 
  ```
- # azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image-latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd xJdkdCi35RT2FWncoLf0xl6/pkNlHSO2/vw3Gxs0uG+2/IN3zmHmnieeodmiNJEUkvmQctbPOTD/ONVxwx6wQ==
+ # azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image-latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd [your-storage-access-key]
  info:    Executing command vm disk upload
  warn:    Any existing blob will be overwritten at http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd
  +  Copying image: 100% (42949673472/42949673472)
