@@ -46,6 +46,13 @@
             "description": "Create a new Virtual Network or use an existing one."
       }
     },
+    "newOrExistingVNET": {
+        "type": "String",
+        "allowedValues": [
+            "new",
+            "existing"
+        ]
+    },
     "virtualNicName": {
         "type": "string",
         "metadata": {
@@ -80,7 +87,6 @@
     "publicIPAddressName": "[parameters('publicNicName')]",
     "osType": "Linux",
     "vmName": "[parameters('vmName')]",
-    "virtualNetworkName": "[parameters('virtualNetworkName')]",
     "nicName": "[parameters('virtualNicName')]",
     "NSGName": "al-tm-NSG",
     "addressPrefix": "10.0.0.0/16",
@@ -91,6 +97,7 @@
     "alertlogicIPRange2": "204.110.219.96/27",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "templatelink": "[concat('https://raw.githubusercontent.com/rjmax/ArmExamples/master/',parameters('newOrExistingVNET'),'VNET.json')]"
     "osDiskVhdName": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk.vhd')]",
     "apiVersion": "2015-06-15"
   },
@@ -103,6 +110,23 @@
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
       }
+    },
+    {
+        "apiVersion": "2015-01-01",
+        "name": "nestedTemplate",
+        "type": "Microsoft.Resources/deployments",
+        "properties": {
+            "mode": "incremental",
+            "templateLink": {
+                "uri": "[variables('templatelink')]",
+                "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+                "virtualNetworkName": {
+                    "value": "[parameters('virtualNetworkName')]"
+                }
+            }
+        }
     },
     {
       "apiVersion": "[variables('apiVersion')]",
@@ -351,5 +375,11 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+        "nestedOutput": {
+            "value": "[reference('nestedTemplate')]",
+            "type": "object"
+        }
+    }
 }
