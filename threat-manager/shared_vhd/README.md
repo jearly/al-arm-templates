@@ -71,7 +71,7 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 | VIRTUALNICNAME | Unique name for Virtual Network Interface | myvirtnic |
 | PUBLICNICNAME | Unique name for Public Network Interface | mypubnic |
 | SUBNETNAME | Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique. | mysubnet |
-| VMSIZE | Size of the new Threat Manager VM being deployed(Defaults to Standard_A2 | Standard_A2 |
+| VMSIZE | Size of the new Threat Manager VM being deployed(Defaults to Standard_A3 | Standard_A3 |
 | Resource Group | Resource Group used to deploy new Threat Manager VM(Use an existing Resource Group or create a new one) | myResourceGroup |
 
 #### Deploy from cli
@@ -176,7 +176,7 @@ virtualNetworkName: myvnet
 virtualNicName: myvirtnic
 publicNicName: mypubnic
 subnetName: mysubnet
-vmSize: Standard_A2
+vmSize: Standard_A3
 + Initializing template configurations and parameters                          
 + Creating a deployment                                                        
 info:    Created template deployment "myDeployment"
@@ -198,7 +198,7 @@ data:    virtualNetworkName           String        myvnet
 data:    virtualNicName               String        myvirtnic                                                      
 data:    publicNicName                String        mypubnic                                                      
 data:    subnetName                   String        mysubnet
-data:    vmSize                       String        Standard_A2                                                        
+data:    vmSize                       String        Standard_A3                                                        
 info:    group deployment create command OK
 # 
 ```
@@ -223,6 +223,6 @@ virtualNetworkName: (Name of new or existing Virtual Network within your selecte
 virtualNicName: (Unique name for Virtual Network Interface)
 publicNicName: (Unique name for Public Network Interface)
 subnetName: (Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique.)
-vmSize: (Defaults to Standard_A2)
+vmSize: (Defaults to Standard_A3)
 ```
 

@@ -67,7 +67,6 @@
     "vmSize": {
       "type": "string",
       "allowedValues": [
-        "Standard_A2",
         "Standard_A3",
         "Standard_A4"
       ],
