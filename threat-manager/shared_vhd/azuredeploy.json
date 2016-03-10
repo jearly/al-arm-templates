@@ -278,7 +278,7 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
+      "name": "[concat(variables('nicName'),copyIndex())]",
       "location": "[variables('location')]",
       "copy": {
         "name": "nicLoop",
