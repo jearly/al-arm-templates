@@ -22,7 +22,7 @@
     },
     "numberOfInstances": {
       "type": "int",
-      "defaultValue": 2,
+      "defaultValue": 1,
       "metadata": {
         "description": "Number of VM instances to create, default is 2"
       }
@@ -105,7 +105,7 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
+      "name": "[concat(variables('publicIPAddressName'),copyIndex())]",
       "location": "[variables('location')]",
       "copy": {
         "name": "publicIPLoop",
