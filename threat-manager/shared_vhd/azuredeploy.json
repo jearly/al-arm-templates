@@ -306,7 +306,6 @@
         "count": "[parameters('numberOfInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyIndex())]",
         "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
       ],
