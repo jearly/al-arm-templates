@@ -32,7 +32,7 @@
       "metadata": {
         "description": "Availability Set name for the VMs"
       }
-    }
+    },
     "vmDnsName": {
       "type": "string",
       "metadata": {
