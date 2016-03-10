@@ -51,18 +51,6 @@
         "description": "Name of the existing VNET resource group"
       }
     },
-    "virtualNicName": {
-        "type": "string",
-        "metadata": {
-            "description": "Name the new Virtual Network Interface."
-      }
-    },
-    "publicNicName": {
-        "type": "string",
-        "metadata": {
-            "description": "Name of the new Public Network Interface."
-      }
-    },
     "subnetName": {
         "type": "string",
         "metadata": {
@@ -82,10 +70,10 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "publicIPAddressName": "[parameters('publicNicName')]",
+    "publicIPAddressName": "TMPublicIP",
     "osType": "Linux",
     "vmName": "[parameters('vmDnsName')]",
-    "nicName": "alTMNic",
+    "nicName": "TMNic",
     "NSGName": "TM-NSG",
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "[parameters('subnetName')]",
