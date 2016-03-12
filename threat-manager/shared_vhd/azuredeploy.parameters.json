@@ -2,41 +2,35 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "adminUsername": {
-      "value": "username"
-    },
-    "adminPassword": {
-      "value": "password!"
-    },
-    "blobContainerName": {
-      "value": "myBlob"
-    },
     "storageAccountName": {
       "value": "myStorageAccount"
     },
+    "blobContainerName": {
+      "value": "myBlobContainer"
+    },
     "osDiskVhdUri": {
-      "value": "http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd"
+      "value": "http://myStorageAccount.blob.core.windows.net/myBlobContainer/al-tmc-image_latest.vhd"
     },
-    "existingVirtualNetworkName": {
-        "value": "myExistingVNET"
+    "virtualNetworkName": {
+      "value": "vNet"
     },
-    "existingVirtualNetworkResourceGroup": {
-        "value": "myExistingVNETResourceGroup"
+    "virtualNetworkResourceGroup": {
+      "value": "myResourceGroup"
     },
-    "virtualNicName": {
-        "value": "myNewVNIC"
+    "numberOfInstances": {
+      "value": 1
     },
-    "publicNicName": {
-        "value": "myNewPNIC"
+    "availabilitySetName": {
+      "value": "myAvailabilitySet"
+    },
+    "vmName": {
+      "value": "myVirtualMachine"
     },
     "subnetName": {
-        "value": "myNewSubnet"
+      "value": "mySubnet"
     },
     "vmSize": {
       "value": "Standard_A3"
-    },
-    "vmName": {
-      "value": "myThreatManagerVM"
     }
   }
 }

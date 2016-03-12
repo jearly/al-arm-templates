@@ -78,14 +78,13 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 | STORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
 | BLOBCONTAINERNAME | Blob container within your storage account | myblobcontainer |
 | OSDISKVHDURI | Fully qualified URL for Threat Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-tmc-image_latest.vhd |
+| AVAILABILITYSETNAME | "Availability Set name for the VMs" | myavailabilityset |
+| NUMBEROFINSTANCES | Number of virtual instances to deploy | 1 |
 | VMNAME | Name of the new Threat Manager VM being deployed | awesome-new-threat-manager-vm |
-| EXISTINGVIRTUALNETWORKNAME | Name of new or existing Virtual Network Name | myvnet |
-| EXISTINGVIRTUALNETWORKRESOURCEGROUP | Name of new or existing resource group containing your existing virtual network | myvnetresourcegroup |
-| VIRTUALNICNAME | Unique name for Virtual Network Interface | myvirtnic |
-| PUBLICNICNAME | Unique name for Public Network Interface | mypubnic |
+| VIRTUALNETWORKNAME | Name of new or existing Virtual Network Name | myvnet |
+| VIRTUALNETWORKRESOURCEGROUP | Name of an existing resource group containing your virtual network | myresourcegroup |
 | SUBNETNAME | Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique. | mysubnet |
 | VMSIZE | Size of the new Threat Manager VM being deployed(Defaults to Standard_A3 | Standard_A3 |
-| Resource Group | Resource Group used to deploy new Threat Manager VM(Use an existing Resource Group or create a new one) | myResourceGroup |
 
 #### Deploy from cli
 
@@ -184,9 +183,11 @@ info:    Supply values for the following parameters
 storageAccountName: storageaccountname
 blobContainerName: containername
 osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
-vmName: myNewTMVM
-existingVirtualNetworkName: myvnet
-existingVirtualNetworkResourceGroup: myvnetresourcegroup
+availabilitySetName: myavset 
+numberOfInstances: 2
+vmName: mythreatmanager
+virtualNetworkName: myvnet
+virtualNetworkResourceGroup: myvnetresourcegroup
 virtualNicName: myvirtnic
 publicNicName: mypubnic
 subnetName: mysubnet
@@ -205,11 +206,13 @@ data:    ---------------------------  ------------  ----------------------------
 data:    storageAccountName                   String        storageaccountname                                                          
 data:    blobContainerName                    String        containername                                                                
 data:    osDiskVhdUri                         String        http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
+data:    availabilitySetName                  String        myavset                                                        
+data:    numberOfInstances                    Int           2
 data:    adminUsername                        String        alertlogic                                                         
 data:    adminPassword                        SecureString  undefined                                                          
-data:    vmName                               String        myNewTMVM                                                          
-data:    existingVirtualNetworkName           String        myvnet                                                          
-data:    existingVirtualNetworkResourceGroup  String        myvnetresourcegroup
+data:    vmName                               String        mythreatmanager                                                          
+data:    virtualNetworkName                   String        myvnet                                                          
+data:    virtualNetworkResourceGroup          String        myvnetresourcegroup
 data:    virtualNicName                       String        myvirtnic                                                      
 data:    publicNicName                        String        mypubnic                                                      
 data:    subnetName                           String        mysubnet
@@ -229,13 +232,13 @@ Your new deployment should successfully create the 'myNewTMVM' VM
 #### Deployment Parameters:
 ```
 storageAccountName: (Storage account where the Threat Manager VM will be deployed)
-blobContainerName: (Blob container to deploy Alert Logic Threat Manager)
+blobContainerName: (Blob container to deploy Threat Manager)
 osDiskVhdUri: (Link to Alert Logic Threat Manager VHD)
-adminUsername: (admin username for the VM)
-adminPassword: (admin password for the VM)
-vmName: (name of the newly created virtual machine)
-existingVirtualNetworkName: (Name of existing Virtual Network)
-existingVirtualNetworkResourceGroup: (Name of the resource group containing your existing Virtual Network)
+availabilitySetName: (Name of new Threat Manager Availability Set)
+numberOfInstances: (Number of Threat Manager instances to deploy)
+vmName: (Name of the newly created virtual machine(s))
+virtualNetworkName: (Name of existing Virtual Network)
+virtualNetworkResourceGroup: (Name of the resource group containing your existing Virtual Network)
 virtualNicName: (Unique name for Virtual Network Interface)
 publicNicName: (Unique name for Public Network Interface)
 subnetName: (Existing subnet within your selected virtual network. If you are creating a new Virtual Network, this name can be unique.)

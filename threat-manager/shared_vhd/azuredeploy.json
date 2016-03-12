@@ -20,35 +20,34 @@
         "description": "Full URI of the latest Threat Manager image copied to your storage account"
       }
     },
-    "numberOfInstances": {
-      "type": "int",
-      "defaultValue": 1,
-      "metadata": {
-        "description": "Number of VM instances to create, default is 2"
-      }
-    },
     "availabilitySetName": {
       "type": "string",
       "metadata": {
         "description": "Availability Set name for the VMs"
       }
     },
-    "vmDnsName": {
+    "numberOfInstances": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of VMs to deploy"
+      }
+    },
+    "vmName": {
       "type": "string",
       "metadata": {
-        "description": "DNS name of your virtual machine(s)"
+        "description": "Name your virtual machine"
       }
     },
     "virtualNetworkName": {
       "type": "string",
       "metadata": {
-        "description": "Name of the existing VNET"
+        "description": "Name of the existing Virtual Network"
       }
     },
     "virtualNetworkResourceGroup": {
       "type": "string",
       "metadata": {
-        "description": "Name of the existing VNET resource group"
+        "description": "Name of the existing Virtual Network resource group"
       }
     },
     "subnetName": {
@@ -70,11 +69,13 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "publicIPAddressName": "TMPublicIP",
+    "adminUsername": "alertlogic",
+    "adminPassword": "P@ssw0rd1",
+    "publicIPAddressName": "ALPubNic",
     "osType": "Linux",
-    "vmName": "[parameters('vmDnsName')]",
-    "nicName": "al-TMNic",
-    "NSGName": "TM-NSG",
+    "vmName": "[parameters('vmName')]",
+    "nicName": "ALVirtNic",
+    "NSGName": "al-tm-NSG",
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "[parameters('subnetName')]",
     "subnet1Prefix": "10.0.0.0/24",
@@ -83,17 +84,20 @@
     "alertlogicIPRange2": "204.110.219.96/27",
     "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
-    "osDiskVhdName": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk.vhd')]",
-    "apiVersion": "2015-06-15",
-    "adminUsername": "alertlogic",
-    "adminPassword": "P@ssw0rd1"
-    
+    "apiVersion": "2015-06-15"
   },
   "resources": [
     {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('availabilitySetName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(variables('publicIPAddressName'),copyIndex())]",
+      "name": "[concat(variables('publicIPAddressName'), copyIndex())]",
       "location": "[variables('location')]",
       "copy": {
         "name": "publicIPLoop",
@@ -102,16 +106,9 @@
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
-          "domainNameLabel": "[parameters('vmDnsName')]"
+          "domainNameLabel": "[concat(parameters('vmName'), '-', copyIndex())]"
         }
       }
-    },
-    {
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('availabilitySetName')]",
-      "apiVersion": "[variables('apiVersion')]",
-      "location": "[variables('location')]",
-      "properties": {}
     },
     {
       "apiVersion": "[variables('apiVersion')]",
@@ -266,14 +263,14 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('nicName'),copyIndex())]",
+      "name": "[concat(variables('nicName'), copyindex())]",
       "location": "[variables('location')]",
       "copy": {
         "name": "nicLoop",
         "count": "[parameters('numberOfInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'),copyIndex())]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'), copyindex())]",
         "[concat('Microsoft.Network/networkSecurityGroups/', variables('NSGName'))]"
       ],
       "properties": {
@@ -286,7 +283,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'), copyindex()))]"
               },
               "subnet": {
                 "id": "[variables('subnetRef')]"
@@ -299,15 +296,15 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(variables('vmName'),copyIndex())]",
+      "name": "[concat(variables('vmName'), copyIndex())]",
       "location": "[variables('location')]",
       "copy": {
-        "name": "vmLoop",
+        "name": "virtualMachineLoop",
         "count": "[parameters('numberOfInstances')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyIndex())]",
-        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyindex())]"
       ],
       "properties": {
         "availabilitySet": {
@@ -317,13 +314,13 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('vmName'),copyIndex())]",
+          "computerName": "[concat(variables('vmName'), copyIndex())]",
           "adminUsername": "[variables('adminUsername')]",
           "adminPassword": "[variables('adminPassword')]"
         },
         "storageProfile": {
           "osDisk": {
-            "name": "osDisk",
+            "name": "[concat(variables('vmName'),'-osDisk-', copyIndex())]",
             "osType": "[variables('osType')]",
             "caching": "ReadWrite",
             "createOption": "FromImage",
@@ -331,14 +328,14 @@
               "uri": "[parameters('osDiskVhdUri')]"
             },
             "vhd": {
-              "uri": "[variables('osDiskVhdName')]"
+              "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk', copyIndex(), '.vhd')]"
             }
           }
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'),copyIndex())]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicName'), copyindex()))]"
             }
           ]
         },
@@ -352,3 +349,4 @@
     }
   ]
 }
+
