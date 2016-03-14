@@ -79,7 +79,7 @@
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "[parameters('subnetName')]",
     "subnet1Prefix": "10.0.0.0/24",
-    "publicIPAddressType": "Dynamic",
+    "publicIPAddressType": "Static",
     "alertlogicIPRange1": "204.110.218.96/27",
     "alertlogicIPRange2": "204.110.219.96/27",
     "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
