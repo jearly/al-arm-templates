@@ -17,7 +17,7 @@
     "osDiskVhdUri": {
       "type": "string",
       "metadata": {
-        "description": "Full URI of the latest Threat Manager image copied to your storage account"
+        "description": "Full URI of the latest Web Security Manager image copied to your storage account"
       }
     },
     "availabilitySetName": {
@@ -28,8 +28,13 @@
     },
     "numberOfInstances": {
       "type": "int",
+      "allowedValues": [
+        2,
+        3,
+        4
+      ],
       "metadata": {
-        "description": "Number of VMs to deploy"
+        "description": "Number of WSM's to deploy"
       }
     },
     "vmName": {
