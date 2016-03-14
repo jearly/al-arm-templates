@@ -1,0 +1,36 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "value": "myStorageAccount"
+    },
+    "blobContainerName": {
+      "value": "myBlobContainer"
+    },
+    "osDiskVhdUri": {
+      "value": "http://myStorageAccount.blob.core.windows.net/myBlobContainer/al-wsm-image_latest.vhd"
+    },
+    "virtualNetworkName": {
+      "value": "vNet"
+    },
+    "virtualNetworkResourceGroup": {
+      "value": "myResourceGroup"
+    },
+    "numberOfInstances": {
+      "value": 1
+    },
+    "availabilitySetName": {
+      "value": "myAvailabilitySet"
+    },
+    "vmName": {
+      "value": "myVirtualMachine"
+    },
+    "subnetName": {
+      "value": "mySubnet"
+    },
+    "vmSize": {
+      "value": "Standard_A3"
+    }
+  }
+}
