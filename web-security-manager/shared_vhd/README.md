@@ -174,7 +174,7 @@ info:    group create command OK
 
 * Create a group deployment
 
-> azure group deployment create --template-uri https://raw.githubusercontent.com/alertlogic/al-arm-templates/master/web-security/shared_vhd/azuredeploy.json myResourceGroup myDeployment
+> azure group deployment create --template-uri https://raw.githubusercontent.com/alertlogic/al-arm-templates/master/web-security-manager/shared_vhd/azuredeploy.json myResourceGroup myDeployment
 
 ```
 # azure group deployment create --template-uri https://raw.githubusercontent.com/alertlogic/al-arm-templates/master/web-security-manager/shared_vhd/azuredeploy.json myResourceGroup myDeployment
