@@ -50,13 +50,13 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  
  *  Copy the Alert Logic Web Security Manager vhd to your storage account
   
- > azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image_latest.vhd [storage account URL]/[blob container name]/[filename].vhd [storage-account-key]
+ > azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image-latest.vhd [storage account URL]/[blob container name]/[filename].vhd [storage-account-key]
 
  ```
- # azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image_latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd [your-storage-access-key]
+ # azure vm disk upload http://alertlogic.blob.core.windows.net/wsmimage/al-wsm-image-latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-wsm-image-latest.vhd [your-storage-access-key]
  info:    Executing command vm disk upload
  warn:    Any existing blob will be overwritten at http://storageaccountname.blob.core.windows.net/
- containername/al-wsm-image_latest.vhd
+ containername/al-wsm-image-latest.vhd
  +  Copying image: 100% (42949673472/42949673472)
  info:    vm disk upload command OK
  #
@@ -182,7 +182,7 @@ info:    Executing command group deployment create
 info:    Supply values for the following parameters
 storageAccountName: storageaccountname
 blobContainerName: containername
-osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd
+osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-wsm-image-latest.vhd
 availabilitySetName: myavset 
 numberOfInstances: 2
 vmName: mywebsecuritymanager
@@ -205,7 +205,7 @@ data:    Name                         Type          Value
 data:    ---------------------------  ------------  -------------------------------------------------------------------
 data:    storageAccountName                   String        storageaccountname                                                          
 data:    blobContainerName                    String        containername                                                                
-data:    osDiskVhdUri                         String        http://storageaccountname.blob.core.windows.net/containername/al-wsm-image_latest.vhd
+data:    osDiskVhdUri                         String        http://storageaccountname.blob.core.windows.net/containername/al-wsm-image-latest.vhd
 data:    availabilitySetName                  String        myavset                                                        
 data:    numberOfInstances                    Int           2
 data:    adminUsername                        String        alertlogic                                                         
