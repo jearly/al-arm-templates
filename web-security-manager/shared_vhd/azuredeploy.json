@@ -1,4 +1,4 @@
-{
+docs{
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -87,6 +87,7 @@
     "publicIPAddressType": "Static",
     "alertlogicIPRange1": "204.110.218.96/27",
     "alertlogicIPRange2": "204.110.219.96/27",
+    "alertlogicIPRange3": "208.71.209.32/27",
     "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
     "apiVersion": "2015-06-15"
@@ -151,6 +152,20 @@
             }
           },
           {
+            "name": "ssh-rule-3",
+            "properties": {
+              "description": "Allow SSH",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2200,
+              "direction": "Inbound"
+            }
+          },
+          {
             "name": "update-rule-1",
             "properties": {
               "description": "Allow HTTPS",
@@ -160,7 +175,7 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2200,
+              "priority": 2300,
               "direction": "Outbound"
             }
           },
@@ -174,7 +189,21 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2300,
+              "priority": 2400,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "update-rule-3",
+            "properties": {
+              "description": "Allow HTTPS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2500,
               "direction": "Outbound"
             }
           },
@@ -188,7 +217,7 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2400,
+              "priority": 2600,
               "direction": "Outbound"
             }
           },
@@ -202,7 +231,21 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2500,
+              "priority": 2700,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "transport-rule-3",
+            "properties": {
+              "description": "Allow Event Transport",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "4138",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2800,
               "direction": "Outbound"
             }
           },
@@ -216,7 +259,7 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2600,
+              "priority": 2900,
               "direction": "Outbound"
             }
           },
@@ -230,7 +273,21 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2700,
+              "priority": 3000,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "dns-rule-3",
+            "properties": {
+              "description": "Allow DNS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "53",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3100,
               "direction": "Outbound"
             }
           },
@@ -244,7 +301,7 @@
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2800,
+              "priority": 3200,
               "direction": "Outbound"
             }
           },
@@ -258,7 +315,7 @@
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 2900,
+              "priority": 3300,
               "direction": "Inbound"
             }
           },
@@ -272,7 +329,7 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 3000,
+              "priority": 3400,
               "direction": "Inbound"
             }
           },
@@ -286,12 +343,40 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 3100,
+              "priority": 3500,
               "direction": "Inbound"
             }
           },
           {
-            "name": "appliance-updates",
+            "name": "mgmt-interface-rule-3",
+            "properties": {
+              "description": "Allow WSM Management traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "4849",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3600,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "appliance-updates-1",
+            "properties": {
+              "description": "Allow appliance updates traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8080",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3700,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "appliance-updates-2",
             "properties": {
               "description": "Allow appliance updates traffic",
               "protocol": "Tcp",
@@ -300,7 +385,21 @@
               "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 3200,
+              "priority": 3800,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "appliance-updates-3",
+            "properties": {
+              "description": "Allow appliance updates traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8080",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3900,
               "direction": "Outbound"
             }
           },
@@ -314,7 +413,7 @@
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
-              "priority": 3300,
+              "priority": 4000,
               "direction": "Inbound"
             }
           }
