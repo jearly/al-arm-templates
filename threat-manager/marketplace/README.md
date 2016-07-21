@@ -37,31 +37,6 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
  > View and copy storage access keys
  >
  > In the Azure Portal, navigate to your storage account and click the Keys icon to view, copy, and regenerate your account access keys. The Access Keys blade also includes pre-configured connection strings using your primary and secondary keys that you can copy to use in your applications
- 
- * Open a terminal or command prompt and set azure cli mode to asm
- 
- ```
- # azure config mode asm
- info:    Executing command config mode
- info:    New mode is asm
- info:    config mode command OK
- #
- ```
- 
- *  Copy the Alert Logic Threat Manager vhd to your storage account
-  
- > azure vm disk upload http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd [storage account URL]/[blob container name]/[filename].vhd [storage-account-key]
-
- ```
- # azure vm disk upload http://alertlogic.blob.core.windows.net/tmcimage/al-tmc-image_latest.vhd http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd [your-storage-access-key]
- info:    Executing command vm disk upload
- warn:    Any existing blob will be overwritten at http://storageaccountname.blob.core.windows.net/
- containername/al-tmc-image_latest.vhd
- +  Copying image: 100% (42949673472/42949673472)
- info:    vm disk upload command OK
- #
- ```
-
 
 #### Deploy from browser
 
@@ -77,7 +52,6 @@ If you do not have a pre-existing Storage Account and Blob Container available, 
 | ----- |:-----------:| :------:|
 | STORAGEACCOUNTNAME | Name of your new or existing storage account | mystorageaccount |
 | BLOBCONTAINERNAME | Blob container within your storage account | myblobcontainer |
-| OSDISKVHDURI | Fully qualified URL for Threat Manager VHD copied to your account in previous steps | http://mystorageaccount.blob.core.windows.net/myblobcontainer/al-tmc-image_latest.vhd |
 | AVAILABILITYSETNAME | "Availability Set name for the VMs" | myavailabilityset |
 | NUMBEROFINSTANCES | Number of virtual instances to deploy | 1 |
 | VMNAME | Name of the new Threat Manager VM being deployed | awesome-new-threat-manager-vm |
@@ -182,7 +156,6 @@ info:    Executing command group deployment create
 info:    Supply values for the following parameters
 storageAccountName: storageaccountname
 blobContainerName: containername
-osDiskVhdUri: http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
 availabilitySetName: myavset 
 numberOfInstances: 2
 vmName: mythreatmanager
@@ -205,7 +178,6 @@ data:    Name                         Type          Value
 data:    ---------------------------  ------------  -------------------------------------------------------------------
 data:    storageAccountName                   String        storageaccountname                                                          
 data:    blobContainerName                    String        containername                                                                
-data:    osDiskVhdUri                         String        http://storageaccountname.blob.core.windows.net/containername/al-tmc-image_latest.vhd
 data:    availabilitySetName                  String        myavset                                                        
 data:    numberOfInstances                    Int           2
 data:    adminUsername                        String        alertlogic                                                         
@@ -233,7 +205,6 @@ Your new deployment should successfully create the 'myNewTMVM' VM
 ```
 storageAccountName: (Storage account where the Threat Manager VM will be deployed)
 blobContainerName: (Blob container to deploy Threat Manager)
-osDiskVhdUri: (Link to Alert Logic Threat Manager VHD)
 availabilitySetName: (Name of new Threat Manager Availability Set)
 numberOfInstances: (Number of Threat Manager instances to deploy)
 vmName: (Name of the newly created virtual machine(s))

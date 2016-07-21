@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy Alert Logic Threat Manager VM",
+  "description": "This template allows you to deploy an Alert Logic Threat Manager VM using a few different options, using the latest version. This will deploy in by default in the same region as your resources group and on a Standard_A3 VM Size.",
+  "summary": "This template takes a minimum amount of parameters and deploys an Alert Logic Threat Manager VM, using the latest version.",
+  "githubUsername": "jearly",
+  "dateUpdated": "2016-02-23"
+}

@@ -1,0 +1,414 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account for deployment"
+      }
+    },
+    "blobContainerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Blob container within storage account for deployment"
+      }
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Availability Set name for the VMs"
+      }
+    },
+    "numberOfInstances": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of VMs to deploy"
+      }
+    },
+    "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name your virtual machine"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing Virtual Network"
+      }
+    },
+    "virtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing Virtual Network resource group"
+      }
+    },
+    "subnetName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of the desired subnet. Must exist in your chosen Virtual Network."
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_A3",
+        "Standard_A4"
+      ],
+      "metadata": {
+        "description": "Select the size of your virtual machine."
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "adminUsername": "alertlogic",
+    "adminPassword": "P@ssw0rd1",
+    "publicIPAddressName": "ALPubNic",
+    "osType": "Linux",
+    "vmName": "[parameters('vmName')]",
+    "nicName": "ALVirtNic",
+    "NSGName": "al-tm-NSG",
+    "addressPrefix": "10.0.0.0/16",
+    "subnetName": "[parameters('subnetName')]",
+    "subnet1Prefix": "10.0.0.0/24",
+    "publicIPAddressType": "Static",
+    "alertlogicIPRange1": "204.110.218.96/27",
+    "alertlogicIPRange2": "204.110.219.96/27",
+    "alertlogicIPRange3": "208.71.209.32/27",
+    "imagePublisher": "alertlogic",
+    "imageOffer": "alert-logic-tm",
+    "skuVersion": "20215000100-TMPBYOL",
+    "alPlan": {
+      "name": "20215000100-tmpbyol",
+      "publisher": "alertlogic",
+      "product": "alert-logic-tm"
+    },
+    "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
+    "apiVersion": "2015-06-15"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('availabilitySetName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(variables('publicIPAddressName'), copyIndex())]",
+      "location": "[variables('location')]",
+      "copy": {
+        "name": "publicIPLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[concat(toLower(parameters('vmName')), '-', copyIndex())]"
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('NSGName')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "ssh-rule-1",
+            "properties": {
+              "description": "Allow SSH",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2000,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "ssh-rule-2",
+            "properties": {
+              "description": "Allow SSH",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "ssh-rule-3",
+            "properties": {
+              "description": "Allow SSH",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2200,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "update-rule-1",
+            "properties": {
+              "description": "Allow HTTPS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2300,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "update-rule-2",
+            "properties": {
+              "description": "Allow HTTPS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2400,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "update-rule-3",
+            "properties": {
+              "description": "Allow HTTPS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2500,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "transport-rule-1",
+            "properties": {
+              "description": "Allow Event Transport",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "4138",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2600,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "transport-rule-2",
+            "properties": {
+              "description": "Allow Event Transport",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "4138",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2700,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "transport-rule-3",
+            "properties": {
+              "description": "Allow Event Transport",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "4138",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2800,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "dns-rule-1",
+            "properties": {
+              "description": "Allow DNS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "53",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange1')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2900,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "dns-rule-2",
+            "properties": {
+              "description": "Allow DNS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "53",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange2')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3000,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "dns-rule-3",
+            "properties": {
+              "description": "Allow DNS",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "53",
+              "sourceAddressPrefix": "[variables('alertlogicIPRange3')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3100,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "general-update-rule",
+            "properties": {
+              "description": "Allow Package Updates",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3200,
+              "direction": "Outbound"
+            }
+          },
+          {
+            "name": "general-http-rule",
+            "properties": {
+              "description": "Allow HTTP traffic",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 3300,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('nicName'), copyindex())]",
+      "location": "[variables('location')]",
+      "copy": {
+        "name": "nicLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'), copyindex())]",
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('NSGName'))]"
+      ],
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSGName'))]"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'), copyindex()))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('vmName'), copyIndex())]",
+      "location": "[variables('location')]",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyindex())]"
+      ],
+      "plan": "[variables('alPlan')]",
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[concat(variables('vmName'), copyIndex())]",
+          "adminUsername": "[variables('adminUsername')]",
+          "adminPassword": "[variables('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('skuVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "[concat(variables('vmName'),'-osDisk-', copyIndex())]",
+            "vhd": {
+            "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk', copyIndex(), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nicName'), copyindex()))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+             "enabled": "true",
+             "storageUri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net')]"
+          }
+        }
+      }
+    }
+  ]
+}
+

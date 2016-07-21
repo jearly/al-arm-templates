@@ -8,9 +8,6 @@
     "blobContainerName": {
       "value": "myBlobContainer"
     },
-    "osDiskVhdUri": {
-      "value": "http://myStorageAccount.blob.core.windows.net/myBlobContainer/al-tmc-image_latest.vhd"
-    },
     "virtualNetworkName": {
       "value": "vNet"
     },
