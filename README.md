@@ -1,7 +1,9 @@
 Alert Logic Azure Resource Manager Templates
 ================
 
-##### Threat Manager: [Deployment How-To](https://github.com/alertlogic/al-arm-templates/blob/master/threat-manager/shared_vhd/README.md)
+##### Threat Manager(Marketplace Image): [Deployment How-To](https://github.com/alertlogic/al-arm-templates/blob/master/threat-manager/marketplace/README.md)
+
+##### Threat Manager(Shared VHD): [Deployment How-To](https://github.com/alertlogic/al-arm-templates/blob/master/threat-manager/shared_vhd/README.md)
 
 ##### Web Security Manager: [Deployment How-To](https://github.com/alertlogic/al-arm-templates/blob/master/web-security-manager/shared_vhd/README.md)
 
