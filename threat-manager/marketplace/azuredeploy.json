@@ -14,12 +14,6 @@
         "description": "Blob container within storage account for deployment"
       }
     },
-    "osDiskVhdUri": {
-      "type": "string",
-      "metadata": {
-        "description": "Full URI of the latest Threat Manager image copied to your storage account"
-      }
-    },
     "availabilitySetName": {
       "type": "string",
       "metadata": {
@@ -83,6 +77,14 @@
     "alertlogicIPRange1": "204.110.218.96/27",
     "alertlogicIPRange2": "204.110.219.96/27",
     "alertlogicIPRange3": "208.71.209.32/27",
+    "imagePublisher": "alertlogic",
+    "imageOffer": "alert-logic-tm",
+    "skuVersion": "20215000100-TMPBYOL",
+    "alPlan": {
+      "name": "20215000100-tmpbyol",
+      "publisher": "alertlogic",
+      "product": "alert-logic-tm"
+    },
     "vnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
     "apiVersion": "2015-06-15"
@@ -363,6 +365,7 @@
         "[concat('Microsoft.Compute/availabilitySets/', parameters('availabilitySetName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), copyindex())]"
       ],
+      "plan": "[variables('alPlan')]",
       "properties": {
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
@@ -376,17 +379,19 @@
           "adminPassword": "[variables('adminPassword')]"
         },
         "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('skuVersion')]",
+            "version": "latest"
+          },
           "osDisk": {
             "name": "[concat(variables('vmName'),'-osDisk-', copyIndex())]",
-            "osType": "[variables('osType')]",
-            "caching": "ReadWrite",
-            "createOption": "FromImage",
-            "image": {
-              "uri": "[parameters('osDiskVhdUri')]"
-            },
             "vhd": {
-              "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk', copyIndex(), '.vhd')]"
-            }
+            "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/',parameters('blobContainerName'),'/',variables('vmName'),'osDisk', copyIndex(), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
           }
         },
         "networkProfile": {
@@ -406,3 +411,4 @@
     }
   ]
 }
+
